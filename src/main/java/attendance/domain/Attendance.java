@@ -1,7 +1,9 @@
 package attendance.domain;
 
 import static attendance.constant.ExceptionMessage.ALREADY_ATTENDANCE;
+import static attendance.constant.ExceptionMessage.CANNOT_EDIT_FUTURE;
 
+import attendance.dto.AttendanceInfo;
 import attendance.vo.AttendanceRecord;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -38,5 +40,20 @@ public class Attendance {
         if (records.putIfAbsent(date, record) != null) {
             throw new IllegalArgumentException(ALREADY_ATTENDANCE.message());
         }
+    }
+
+    public AttendanceInfo edit(LocalDate dateToEdit, LocalTime timeForEdit) {
+        AttendanceRecord previous = records.get(dateToEdit);
+        if (previous == null) {
+            throw new IllegalArgumentException(CANNOT_EDIT_FUTURE.message());
+        }
+
+        AttendanceRecord record = AttendanceRecord.of(dateToEdit, timeForEdit);
+        if (records.replace(dateToEdit, record) == null) {
+            throw new IllegalArgumentException(CANNOT_EDIT_FUTURE.message());
+        }
+
+        return AttendanceInfo.of(previous.getDate(), previous.getTime(),
+                Judge.getAttendanceStatus(previous.getDate(), previous.getTime()));
     }
 }

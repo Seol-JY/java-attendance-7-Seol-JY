@@ -3,6 +3,7 @@ package attendance.domain;
 import static attendance.constant.ExceptionMessage.NOT_FOUND_NICKNAME;
 
 import attendance.constant.AttendanceStatus;
+import attendance.dto.AttendanceEditInfo;
 import attendance.dto.AttendanceInfo;
 import attendance.dto.CrewFileDto;
 import attendance.vo.AttendanceRecord;
@@ -50,5 +51,12 @@ public class Attendances {
         attendance.attend(date, time);
         AttendanceStatus status = Judge.getAttendanceStatus(date, time);
         return AttendanceInfo.of(date, time, status);
+    }
+
+    public AttendanceEditInfo edit(String nickname, LocalDate dateToEdit, LocalTime timeForEdit) {
+        Attendance attendance = records.get(nickname);
+        AttendanceInfo previousInfo = attendance.edit(dateToEdit, timeForEdit);
+
+        return AttendanceEditInfo.of(previousInfo, timeForEdit, Judge.getAttendanceStatus(dateToEdit, timeForEdit));
     }
 }

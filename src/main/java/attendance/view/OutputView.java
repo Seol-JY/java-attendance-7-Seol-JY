@@ -1,6 +1,7 @@
 package attendance.view;
 
 import attendance.constant.AttendanceStatus;
+import attendance.dto.AttendanceEditInfo;
 import attendance.dto.AttendanceInfo;
 import java.time.format.TextStyle;
 import java.util.Locale;
@@ -16,14 +17,36 @@ public class OutputView {
                     Q. 종료
                     """;
     public static final String ATTENDANCE_INFO_DATE = "%02d월 %02d일 %s요일";
-    public static final String ATTENDANCE_INFO_TIME = " %02d:%02d (%s)\n";
-    public static final String ATTENDANCE_INFO_TIME_ABSENT = " --:-- (결석)\n";
+    public static final String ATTENDANCE_INFO_TIME = " %02d:%02d (%s)";
+    public static final String ATTENDANCE_INFO_TIME_ABSENT = " --:-- (결석)";
+    public static final String ARROW = " -> ";
+    public static final String EDIT_COMPLETED = " 수정 완료!";
 
     public void printOptions(Integer month, Integer date) {
         System.out.printf(WELCOME_MESSAGE + OPTIONS_MESSAGE, month, date);
     }
 
     public void printAttendanceInfo(AttendanceInfo attendanceInfo) {
+        printAttendanceInfoDetail(attendanceInfo);
+        System.out.println();
+    }
+
+    public void printAttendanceEditInfo(AttendanceEditInfo attendanceEditInfo) {
+        printAttendanceInfoDetail(attendanceEditInfo.previous());
+        System.out.print(ARROW);
+
+        if (!attendanceEditInfo.status().equals(AttendanceStatus.결석)) {
+            System.out.printf(ATTENDANCE_INFO_TIME, attendanceEditInfo.time().getHour(),
+                    attendanceEditInfo.time().getMinute(),
+                    attendanceEditInfo.status());
+            return;
+        }
+
+        System.out.print(ATTENDANCE_INFO_TIME_ABSENT);
+        System.out.println(EDIT_COMPLETED);
+    }
+
+    private void printAttendanceInfoDetail(AttendanceInfo attendanceInfo) {
         System.out.printf(ATTENDANCE_INFO_DATE,
                 attendanceInfo.date().getMonthValue(),
                 attendanceInfo.date().getDayOfMonth(),

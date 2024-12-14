@@ -1,9 +1,10 @@
 package attendance.controller;
 
 import attendance.domain.Attendances;
-import attendance.dto.AttendanceInfo;
+import attendance.dto.AttendanceEditInfo;
 import attendance.dto.CrewFileDto;
 import attendance.loader.FileDataLoader;
+import attendance.util.DecemberLocalDateParser;
 import attendance.util.TimeParser;
 import attendance.view.InputView;
 import attendance.view.OutputView;
@@ -42,14 +43,26 @@ public class AttendanceController {
 
             ///1
             // TODO: 휴일검증 필요
-            String nickname = inputView.getCrewNickname();
-            attendances.validateCrewNickname(nickname);
+//            String nickname = inputView.getCrewNickname();
+//            attendances.validateCrewNickname(nickname);
+//
+//            String rawCrewTime = inputView.getCrewTime();
+//            LocalTime time = TimeParser.parse(rawCrewTime);
+//
+//            AttendanceInfo attendanceInfo = attendances.attend(nickname, datetime.toLocalDate(), time);
+//            outputView.printAttendanceInfo(attendanceInfo);
 
-            String rawCrewTime = inputView.getCrewTime();
-            LocalTime time = TimeParser.parse(rawCrewTime);
+            ///2
+            // TODO: 휴일검증 필요
+            String nickname2 = inputView.getCrewNicknameForEdit();
+            String rawDate2 = inputView.getDateForEdit();
+            LocalDate date = DecemberLocalDateParser.parse(rawDate2);
 
-            AttendanceInfo attendanceInfo = attendances.attend(nickname, datetime.toLocalDate(), time);
-            outputView.printAttendanceInfo(attendanceInfo);
+            String rawTime2 = inputView.getTimeForEdit();
+            LocalTime time2 = TimeParser.parse(rawTime2);
+
+            AttendanceEditInfo attendanceEditInfo = attendances.edit(nickname2, date, time2);
+            outputView.printAttendanceEditInfo(attendanceEditInfo);
 
         } while (shouldContinue);
     }
