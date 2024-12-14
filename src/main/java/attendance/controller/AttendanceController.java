@@ -1,5 +1,8 @@
 package attendance.controller;
 
+import static attendance.constant.ExceptionMessage.NOT_CAMPUS_DAY;
+
+import attendance.constant.Holiday;
 import attendance.constant.MenuOptions;
 import attendance.domain.Attendances;
 import attendance.dto.AttendanceEditInfo;
@@ -11,10 +14,13 @@ import attendance.util.TimeParser;
 import attendance.view.InputView;
 import attendance.view.OutputView;
 import camp.nextstep.edu.missionutils.DateTimes;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 
 public class AttendanceController {
     public static final String ATTENDANCES_FILE_PATH = "src/main/resources/attendances.csv";
@@ -60,7 +66,7 @@ public class AttendanceController {
     }
 
     private void create(Attendances attendances, LocalDateTime datetime) {
-        // TODO: 휴일검증 필요
+        validateCampusDay(datetime.toLocalDate());
         String nickname = inputView.getCrewNickname();
         attendances.validateCrewNickname(nickname);
 
@@ -72,7 +78,6 @@ public class AttendanceController {
     }
 
     private void edit(Attendances attendances) {
-        // TODO: 휴일검증 필요
         String nickname = inputView.getCrewNicknameForEdit();
         attendances.validateCrewNickname(nickname);
         String rawDate2 = inputView.getDateForEdit();
@@ -92,4 +97,21 @@ public class AttendanceController {
 
         outputView.printAllRecord(nickname, attendanceInfos);
     }
+
+    private void validateCampusDay(LocalDate date) {
+        if (Holiday.isHoliday(date) || isWeekend(date)) {
+            throw new IllegalArgumentException(
+                    NOT_CAMPUS_DAY.format(
+                            date.getMonthValue(),
+                            date.getDayOfMonth(),
+                            date.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.KOREAN)
+                    ));
+        }
+    }
+
+    private boolean isWeekend(LocalDate date) {
+        return date.getDayOfWeek().equals(DayOfWeek.SATURDAY) || date.getDayOfWeek().equals(DayOfWeek.SUNDAY);
+    }
+
+
 }

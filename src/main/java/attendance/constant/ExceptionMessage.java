@@ -15,10 +15,10 @@ public enum ExceptionMessage {
     }
 
     public String message() {
-        return message;
+        return "[ERROR] " + message;
     }
 
     public String format(Object... args) {
-        return String.format(message, args);
+        return "[ERROR] " + String.format(message, args);
     }
 }
