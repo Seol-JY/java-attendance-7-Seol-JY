@@ -22,7 +22,7 @@ public class OutputView {
     public static final String ATTENDANCE_INFO_DATE = "%02d월 %02d일 %s요일";
     public static final String ATTENDANCE_INFO_TIME = " %02d:%02d (%s)";
     public static final String ATTENDANCE_INFO_TIME_ABSENT = " --:-- (결석)";
-    public static final String ARROW = " -> ";
+    public static final String ARROW = " ->";
     public static final String EDIT_COMPLETED = " 수정 완료!";
     public static final String NICKNAME_RECORD = "이번 달 %s의 출석 기록입니다.\n\n";
 
@@ -42,7 +42,7 @@ public class OutputView {
         System.out.printf(ATTENDANCE_INFO_TIME, attendanceEditInfo.time().getHour(),
                 attendanceEditInfo.time().getMinute(),
                 attendanceEditInfo.status());
-        System.out.println(EDIT_COMPLETED);
+        System.out.print(EDIT_COMPLETED);
     }
 
     public void printAllRecord(String nickname, List<AttendanceInfo> attendanceInfos) {

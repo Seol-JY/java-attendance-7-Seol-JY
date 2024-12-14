@@ -39,10 +39,7 @@ public class AttendanceController {
     public void run() {
         List<CrewFileDto> crewDtos = new FileDataLoader<>(CrewFileDto.class).load(ATTENDANCES_FILE_PATH);
         Attendances attendances = Attendances.from(crewDtos);
-        // TODO: 변경 필요
         LocalDateTime datetime = DateTimes.now();
-//        LocalTime t = DateTimes.now().toLocalTime();
-//        LocalDateTime datetime = LocalDateTime.of(LocalDate.of(2024, 12, 5), t);
 
         MenuOptions option;
         do {
@@ -60,6 +57,9 @@ public class AttendanceController {
             }
             if (option == MenuOptions.GET) {
                 get(attendances);
+                continue;
+            }
+            if (option == MenuOptions.DISMISSAL) {
                 continue;
             }
         } while (option != MenuOptions.QUIT);

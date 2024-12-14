@@ -7,7 +7,7 @@ public class InputView {
     public static final String GET_CREW_NICKNAME_FOR_EDIT = "출석을 수정하려는 크루의 닉네임을 입력해 주세요.";
     public static final String GET_CREW_TIME = "등교 시간을 입력해 주세요.";
     public static final String GET_DATE_FOR_EDIT = "수정하려는 날짜(일)를 입력해 주세요.";
-    public static final String GET_TIME_FOR_EDIT = "수정하려는 날짜(일)를 입력해 주세요.";
+    public static final String GET_TIME_FOR_EDIT = "언제로 변경하겠습니까?";
 
     public String getCrewNickname() {
         return readLineWithPrompt(GET_CREW_NICKNAME);
