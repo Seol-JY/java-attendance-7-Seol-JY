@@ -28,6 +28,10 @@ public class InputView {
     public String getTimeForEdit() {
         return readLineWithPrompt(GET_TIME_FOR_EDIT);
     }
+    
+    public String getMenuOption() {
+        return readLine().strip();
+    }
 
     private String readLineWithPrompt(String prompt) {
         System.out.println(prompt);

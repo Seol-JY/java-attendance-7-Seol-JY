@@ -1,7 +1,9 @@
 package attendance.controller;
 
+import attendance.constant.MenuOptions;
 import attendance.domain.Attendances;
 import attendance.dto.AttendanceEditInfo;
+import attendance.dto.AttendanceInfo;
 import attendance.dto.CrewFileDto;
 import attendance.loader.FileDataLoader;
 import attendance.util.DecemberLocalDateParser;
@@ -32,38 +34,51 @@ public class AttendanceController {
         List<CrewFileDto> crewDtos = new FileDataLoader<>(CrewFileDto.class).load(ATTENDANCES_FILE_PATH);
         Attendances attendances = Attendances.from(crewDtos);
         // TODO: 변경 필요
-//        LocalDateTime datetime = DateTimes.now();
-        LocalTime t = DateTimes.now().toLocalTime();
+        LocalDateTime datetime = DateTimes.now();
+//        LocalTime t = DateTimes.now().toLocalTime();
+//
+//        LocalDateTime datetime = LocalDateTime.of(LocalDate.of(2024, 12, 5), t);
 
-        LocalDateTime datetime = LocalDateTime.of(LocalDate.of(2024, 12, 5), t);
-
-        boolean shouldContinue = false;
+        MenuOptions option;
         do {
             outputView.printOptions(datetime.getMonthValue(), datetime.getDayOfMonth());
+            String rawOption = inputView.getMenuOption();
+            option = MenuOptions.getMenuOptionsByInput(rawOption);
 
-            ///1
-            // TODO: 휴일검증 필요
-//            String nickname = inputView.getCrewNickname();
-//            attendances.validateCrewNickname(nickname);
-//
-//            String rawCrewTime = inputView.getCrewTime();
-//            LocalTime time = TimeParser.parse(rawCrewTime);
-//
-//            AttendanceInfo attendanceInfo = attendances.attend(nickname, datetime.toLocalDate(), time);
-//            outputView.printAttendanceInfo(attendanceInfo);
+            if (option == MenuOptions.CREATE) {
+                create(attendances, datetime);
+                continue;
+            }
+            if (option == MenuOptions.EDIT) {
+                edit(attendances);
+                continue;
+            }
+        } while (option != MenuOptions.QUIT);
+    }
 
-            ///2
-            // TODO: 휴일검증 필요
-            String nickname2 = inputView.getCrewNicknameForEdit();
-            String rawDate2 = inputView.getDateForEdit();
-            LocalDate date = DecemberLocalDateParser.parse(rawDate2);
+    private void create(Attendances attendances, LocalDateTime datetime) {
+        // TODO: 휴일검증 필요
+        String nickname = inputView.getCrewNickname();
+        attendances.validateCrewNickname(nickname);
 
-            String rawTime2 = inputView.getTimeForEdit();
-            LocalTime time2 = TimeParser.parse(rawTime2);
+        String rawCrewTime = inputView.getCrewTime();
+        LocalTime time = TimeParser.parse(rawCrewTime);
 
-            AttendanceEditInfo attendanceEditInfo = attendances.edit(nickname2, date, time2);
-            outputView.printAttendanceEditInfo(attendanceEditInfo);
+        AttendanceInfo attendanceInfo = attendances.attend(nickname, datetime.toLocalDate(), time);
+        outputView.printAttendanceInfo(attendanceInfo);
+    }
 
-        } while (shouldContinue);
+    private void edit(Attendances attendances) {
+        // TODO: 휴일검증 필요
+        String nickname = inputView.getCrewNicknameForEdit();
+        attendances.validateCrewNickname(nickname);
+        String rawDate2 = inputView.getDateForEdit();
+        LocalDate date = DecemberLocalDateParser.parse(rawDate2);
+
+        String rawTime2 = inputView.getTimeForEdit();
+        LocalTime time2 = TimeParser.parse(rawTime2);
+
+        AttendanceEditInfo attendanceEditInfo = attendances.edit(nickname, date, time2);
+        outputView.printAttendanceEditInfo(attendanceEditInfo);
     }
 }
