@@ -73,8 +73,12 @@ public class OutputView {
         int absent = statuss.get(AttendanceStatus.지각) != null ? statuss.get(AttendanceStatus.지각).size() / 3 : 0;
         int absent2 = statuss.get(AttendanceStatus.결석) != null ? statuss.get(AttendanceStatus.결석).size() : 0;
 
-        if (absent + absent2 >= 3) {
+        if (absent + absent2 >= 2) {
+            System.out.println("\n경고 대상자입니다.");
+        } else if (absent + absent2 >= 3) {
             System.out.println("\n면담 대상자입니다.");
+        } else if (absent + absent2 >= 5) {
+            System.out.println("\n제적 대상자입니다.");
         }
     }
 
