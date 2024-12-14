@@ -36,7 +36,6 @@ public class AttendanceController {
         // TODO: 변경 필요
         LocalDateTime datetime = DateTimes.now();
 //        LocalTime t = DateTimes.now().toLocalTime();
-//
 //        LocalDateTime datetime = LocalDateTime.of(LocalDate.of(2024, 12, 5), t);
 
         MenuOptions option;
@@ -51,6 +50,10 @@ public class AttendanceController {
             }
             if (option == MenuOptions.EDIT) {
                 edit(attendances);
+                continue;
+            }
+            if (option == MenuOptions.GET) {
+                get(attendances);
                 continue;
             }
         } while (option != MenuOptions.QUIT);
@@ -80,5 +83,13 @@ public class AttendanceController {
 
         AttendanceEditInfo attendanceEditInfo = attendances.edit(nickname, date, time2);
         outputView.printAttendanceEditInfo(attendanceEditInfo);
+    }
+
+    private void get(Attendances attendances) {
+        String nickname = inputView.getCrewNicknameForGet();
+        attendances.validateCrewNickname(nickname);
+        List<AttendanceInfo> attendanceInfos = attendances.getAll(nickname);
+
+        outputView.printAllRecord(nickname, attendanceInfos);
     }
 }

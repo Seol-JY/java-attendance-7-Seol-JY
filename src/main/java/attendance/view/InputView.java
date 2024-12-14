@@ -17,6 +17,10 @@ public class InputView {
         return readLineWithPrompt(GET_CREW_NICKNAME_FOR_EDIT);
     }
 
+    public String getCrewNicknameForGet() {
+        return readLineWithPrompt(GET_CREW_NICKNAME);
+    }
+
     public String getCrewTime() {
         return readLineWithPrompt(GET_CREW_TIME);
     }
@@ -28,7 +32,7 @@ public class InputView {
     public String getTimeForEdit() {
         return readLineWithPrompt(GET_TIME_FOR_EDIT);
     }
-    
+
     public String getMenuOption() {
         return readLine().strip();
     }
@@ -42,5 +46,4 @@ public class InputView {
         System.out.printf(prompt, args);
         return readLine().strip();
     }
-
 }

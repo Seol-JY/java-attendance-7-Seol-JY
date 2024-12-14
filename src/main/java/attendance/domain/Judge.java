@@ -11,7 +11,7 @@ public class Judge {
 
     public static AttendanceStatus getAttendanceStatus(LocalDate date, LocalTime time) {
         if (date.getDayOfWeek().equals(DayOfWeek.MONDAY)) {
-            if (MONDAY_TRAINING_START_TIME.plusMinutes(6).isBefore(time)) {
+            if (MONDAY_TRAINING_START_TIME.plusMinutes(6).isAfter(time)) {
                 return AttendanceStatus.출석;
             }
             if (MONDAY_TRAINING_START_TIME.plusMinutes(31).isAfter(time)) {

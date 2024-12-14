@@ -56,4 +56,8 @@ public class Attendance {
         return AttendanceInfo.of(previous.getDate(), previous.getTime(),
                 Judge.getAttendanceStatus(previous.getDate(), previous.getTime()));
     }
+
+    public AttendanceRecord getByDate(LocalDate date) {
+        return records.get(date);
+    }
 }
