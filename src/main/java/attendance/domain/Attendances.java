@@ -1,7 +1,13 @@
 package attendance.domain;
 
+import static attendance.constant.ExceptionMessage.NOT_FOUND_NICKNAME;
+
+import attendance.constant.AttendanceStatus;
+import attendance.dto.AttendanceInfo;
 import attendance.dto.CrewFileDto;
 import attendance.vo.AttendanceRecord;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,5 +35,20 @@ public class Attendances {
         }
 
         return new Attendances(records);
+    }
+
+    public void validateCrewNickname(String nickname) {
+        if (records.keySet().stream().anyMatch(current -> current.equals(nickname))) {
+            return;
+        }
+
+        throw new IllegalArgumentException(NOT_FOUND_NICKNAME.message());
+    }
+
+    public AttendanceInfo attend(String nickname, LocalDate date, LocalTime time) {
+        Attendance attendance = records.get(nickname);
+        attendance.attend(date, time);
+        AttendanceStatus status = Judge.getAttendanceStatus(date, time);
+        return AttendanceInfo.of(date, time, status);
     }
 }
